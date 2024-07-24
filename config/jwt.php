@@ -103,6 +103,12 @@ return [
 
     'ttl' => env('JWT_TTL', 60),
 
+    // 'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
+
+    // 'algo' => env('JWT_ALGO', 'HS256'),
+
+    // 'blacklist_enabled' => env('JWT_BLACKLIST_ENABLED', true),
+
     /*
     |--------------------------------------------------------------------------
     | Refresh time to live
