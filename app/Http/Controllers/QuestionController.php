@@ -9,8 +9,11 @@ class QuestionController extends Controller
 {
     public function index()
     {
-        return Question::all();
+        return response()->json(Question::all());
     }
+    // {
+    //     return Question::all();
+    // }
 
     public function create()
     {

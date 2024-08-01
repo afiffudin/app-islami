@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\QuizController;
-use App\Http\Controllers\AuthController;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,16 +16,23 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-    // Route::get('/', function () {
-    //     return view('welcome');
-    // });
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
+});
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-Route::post('logout', [AuthController::class, 'logout']);
-Route::get('/', [QuizController::class, 'show']);
-Route::get('/quiz', [QuizController::class, 'show']);
-Route::post('/quiz/submit', [QuizController::class, 'submitQuiz'])->name('submit.quiz');
-Route::post('/quiz', [QuizController::class, 'checkAnswer']);
-Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
-Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

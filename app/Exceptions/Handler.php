@@ -38,4 +38,14 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function render($request, Throwable $exception)
+{
+    
+    if ($exception instanceof TokenMismatchException) {
+        // Jika terjadi TokenMismatchException, alihkan ke halaman /home
+       return redirect('/');
+    }
+
+    return parent::render($request, $exception);
+}
 }
