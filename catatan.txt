@@ -1,0 +1,8 @@
+1. error 2002 ( karena env host nya cocokin dengan host mysql yang ada di docker compose yml  db:
+    image: mysql:8.0
+    container_name: mysql)
+2. error file_put_contents ( pastikan directory session ada, Periksa ijin direktory,Buka C:\laragon\www\app-islam\storage\framework\.
+Klik kanan, pilih New > Folder.
+Beri nama folder sessions, buat ijin Direktori Jika Diperlukan : mkdir C:\laragon\www\app-islam\storage\framework\sessions
+, Bersihkan Cache Laravel : php artisan config:cache, php artisan cache:clear, Restart Server Web : docker-compose restart)
+2. Bisa karena versi mysql di docker nya, bisa cek masuk ke mysql : mysql -u root -p, Kemudian cek versi nya, ini menggunakan versi mysql 8.0
