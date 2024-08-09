@@ -1,33 +1,34 @@
-# Gunakan image PHP yang sesuai (misalnya PHP 8.1)
-FROM php:8.2
+FROM php:8.2-fpm
 
-# Set lingkungan kerja
-WORKDIR /app
-
-# Salin semua file ke direktori kerja
-COPY . /app
-
-# Salin file composer.lock dan composer.json ke direktori kerja
-# COPY composer.lock composer.json /app/
-
-# Instal dependensi sistem yang diperlukan
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    libzip-dev \
+    build-essential \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zip \
     unzip \
-    && docker-php-ext-install zip
+    git \
+    curl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd \
+    && docker-php-ext-install pdo pdo_mysql
 
-# Instal Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Jalankan composer install
+# Set working directory
+WORKDIR /var/www
+
+# Copy existing application directory contents
+COPY . /var/www
+
+# Install application dependencies
 RUN composer install
 
+# Copy existing application directory permissions
+COPY --chown=www-data:www-data . /var/www
 
-# Set izin yang sesuai untuk direktori
-RUN chown -R www-data:www-data /app
-
-# Jalankan aplikasi
-CMD php artisan serve --host=0.0.0.0 --port=8080
-# CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
-EXPOSE 8080
-
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]

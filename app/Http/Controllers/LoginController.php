@@ -9,13 +9,14 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
+        dd($credentials);
         $credentials = $request->only(['email', 'password']);
 
         if (Auth::attempt($credentials)) {
             return response()->json(['success' => true]);
         }
 
-        return response()->json(['success' => false]);
+        return response()->json(['success' => true]);
     }
 
     public function getUser()
