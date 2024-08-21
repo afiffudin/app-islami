@@ -1,5 +1,5 @@
 1. error 2002 ( karena env host nya cocokin dengan host mysql yang ada di docker compose yml  db:
-    image: mysql:8.0
+    image: mysql:8.0, dan pastikan DB_Socket tidak dimasukin
     container_name: mysql)
 2. error file_put_contents ( pastikan directory session ada, Periksa ijin direktory,Buka C:\laragon\www\app-islam\storage\framework\.
 Klik kanan, pilih New > Folder.
