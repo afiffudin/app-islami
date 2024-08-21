@@ -1,6 +1,6 @@
-Cara menjalankan 
+**Cara menjalankan** 
 
-
+*Noted ( Harus buat akun docker cloud )
 **Versi Docker & NGINX**
 ## 1. Npm run dev
 ## 2. Buka Docker Dekstop kemudian jalankan docker compose up ( Lihat apakah jalan atau tidak )
