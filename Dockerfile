@@ -1,7 +1,9 @@
+# Menggunakan image PHP dengan FPM
 FROM php:8.2-fpm
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN --mount=type=cache,target=/var/cache/apt \
+apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
     libjpeg-dev \
@@ -20,15 +22,17 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy existing application directory contents
-COPY . /var/www
+# # Copy composer.json dan composer.lock terlebih dahulu
+COPY --chown=www-data:www-data .  /var/www
 
-# Install application dependencies
-RUN composer install
+# Install PHP dependencies via Composer
+RUN composer update
 
-# Copy existing application directory permissions
-COPY --chown=www-data:www-data . /var/www
+# # Copy semua file ke working directory
+# COPY --chown=www-data:www-data . /var/www
 
-# Expose port 9000 and start php-fpm server
+# Expose port PHP-FPM
 EXPOSE 9000
+
+# Menjalankan PHP-FPM
 CMD ["php-fpm"]
